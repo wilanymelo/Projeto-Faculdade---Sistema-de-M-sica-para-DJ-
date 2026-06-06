@@ -6,7 +6,7 @@ Projeto desenvolvido para a faculdade de Sistemas para Internet.
 
 Render:
 https://sistema-de-musica-para-dj.onrender.com
-
+   
 ## Front-end
 
 GitHub Pages:
