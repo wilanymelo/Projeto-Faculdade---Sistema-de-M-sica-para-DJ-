@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DJ Music System</title>
+
+<style>
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Segoe UI',sans-serif;
+}
+
+body{
+    background:linear-gradient(135deg,#0f172a,#1e1b4b);
+    color:white;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    min-height:100vh;
+    padding:20px;
+}
+
+.container{
+    width:700px;
+    background:rgba(255,255,255,0.05);
+    backdrop-filter:blur(15px);
+    padding:30px;
+    border-radius:25px;
+    box-shadow:0 0 30px rgba(168,85,247,0.4);
+}
+
+.logo{
+    text-align:center;
+    font-size:4rem;
+}
+
+h1{
+    text-align:center;
+    color:#c084fc;
+    margin-bottom:10px;
+}
+
+.subtitle{
+    text-align:center;
+    margin-bottom:25px;
+    color:#d8b4fe;
+}
+
+h2{
+    color:#a855f7;
+    margin-top:20px;
+    margin-bottom:10px;
+}
+
+input{
+    width:100%;
+    padding:12px;
+    margin:8px 0;
+    border:none;
+    border-radius:12px;
+    background:#1f2937;
+    color:white;
+    font-size:15px;
+}
+
+input:focus{
+    outline:none;
+    border:2px solid #a855f7;
+}
+
+button{
+    width:100%;
+    padding:12px;
+    margin-top:10px;
+    border:none;
+    border-radius:12px;
+    background:#8b5cf6;
+    color:white;
+    font-weight:bold;
+    cursor:pointer;
+    transition:0.3s;
+}
+
+button:hover{
+    background:#a855f7;
+    transform:translateY(-2px);
+}
+
+.playlist-btn{
+    margin-top:20px;
+}
+
+ul{
+    list-style:none;
+    margin-top:20px;
+}
+
+li{
+    background:#1f2937;
+    margin-bottom:10px;
+    padding:15px;
+    border-radius:12px;
+    border-left:5px solid #a855f7;
+    transition:0.3s;
+}
+
+li:hover{
+    transform:translateX(5px);
+}
+
+.footer{
+    text-align:center;
+    margin-top:25px;
+    color:#94a3b8;
+    font-size:14px;
+}
+
+</style>
+
+</head>
+<body>
+
+<div class="container">
+
+<div class="logo">
+🎧
+</div>
+
+<h1>DJ Music System</h1>
+
+<p class="subtitle">
+Gerencie músicas e playlists
+</p>
+
+<h2>Cadastro</h2>
+
+<form id="registerForm">
+
+<input
+type="email"
+id="registerEmail"
+placeholder="Digite seu e-mail"
+required>
+
+<input
+type="password"
+id="registerPassword"
+placeholder="Digite sua senha"
+required>
+
+<button type="submit">
+Cadastrar
+</button>
+
+</form>
+
+<h2>Login</h2>
+
+<form id="loginForm">
+
+<input
+type="email"
+id="loginEmail"
+placeholder="Digite seu e-mail"
+required>
+
+<input
+type="password"
+id="loginPassword"
+placeholder="Digite sua senha"
+required>
+
+<button type="submit">
+Entrar
+</button>
+
+</form>
+
+<h2>Playlist</h2>
+
+<button
+id="getMusicasBtn"
+class="playlist-btn">
+🎵 Carregar Playlist
+</button>
+
+<ul id="musicasList"></ul>
+
+<div class="footer">
+Sistema de Música para DJ
+</div>
+
+</div>
+
+<script>
+
+const API = "http://localhost:3000";
+
+document.getElementById('registerForm')
+.addEventListener('submit', async (e)=>{
+
+e.preventDefault();
+
+const email =
+document.getElementById('registerEmail').value;
+
+const password =
+document.getElementById('registerPassword').value;
+
+const response = await fetch(
+`${API}/register`,
+{
+method:'POST',
+headers:{
+'Content-Type':'application/json'
+},
+body:JSON.stringify({
+email,
+password
+})
+}
+);
+
+const texto = await response.text();
+
+alert(texto);
+
+});
+
+document.getElementById('loginForm')
+.addEventListener('submit', async (e)=>{
+
+e.preventDefault();
+
+const email =
+document.getElementById('loginEmail').value;
+
+const password =
+document.getElementById('loginPassword').value;
+
+const response = await fetch(
+`${API}/login`,
+{
+method:'POST',
+headers:{
+'Content-Type':'application/json'
+},
+body:JSON.stringify({
+email,
+password
+})
+}
+);
+
+const data = await response.json();
+
+if(response.ok){
+
+localStorage.setItem(
+'token',
+data.token
+);
+
+alert('Login realizado com sucesso!');
+
+}else{
+
+alert('Erro no login');
+
+}
+
+});
+
+document.getElementById('getMusicasBtn')
+.addEventListener('click', async ()=>{
+
+const token =
+localStorage.getItem('token');
+
+if(!token){
+    alert('Faça login primeiro!');
+    return;
+}
+
+const response = await fetch(
+`${API}/musicas`,
+{
+headers:{
+Authorization:`Bearer ${token}`
+}
+}
+);
+
+const musicas =
+await response.json();
+
+const lista =
+document.getElementById('musicasList');
+
+lista.innerHTML='';
+
+musicas.forEach(musica=>{
+
+const li =
+document.createElement('li');
+
+li.innerHTML =
+`🎵 <strong>${musica.titulo}</strong><br>
+🎧 ${musica.artista}`;
+
+lista.appendChild(li);
+
+});
+
+});
+
+</script>
+
+</body>
+</html>
