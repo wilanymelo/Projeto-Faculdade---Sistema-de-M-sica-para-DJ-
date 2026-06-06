@@ -1,6 +1,6 @@
 # Sistema de Música para DJ
 
-Projeto desenvolvido para a disciplina de Sistemas para Internet.
+Projeto desenvolvido para a faculdade de Sistemas para Internet.
 
 ## API
 
