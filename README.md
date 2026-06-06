@@ -35,7 +35,7 @@ Retorna um token JWT.
 
 Rota protegida por JWT.
 
-## Tecnologias
+### Tecnologias
 
 - Node.js
 - Express
