@@ -89,6 +89,12 @@ app.get('/musicas', autenticarJWT, (req, res) => {
 
 });
 
-app.listen(3000, () => {
-    console.log('Servidor rodando na porta 3000');
+app.get('/', (req, res) => {
+    res.send('API do Sistema de Música para DJ está funcionando!');
+});
+
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+    console.log(`Servidor rodando na porta ${PORT}`);
 });
